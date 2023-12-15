@@ -51,10 +51,25 @@ app.get('/api/customers', async (req, res) => {
 });
 
 app.get('/api/customers/:id',async(req, res) => {
-    res.json({
+    console.log({
         requestParams: req.params,
         requestQuery: req.query
     });
+    try{
+        const customerId = req.params.id;
+        console.log(customerId);
+        const customer = await Customer.findById(customerId);
+        console.log(customer);
+        if(!customer){ // if customer == null 
+            res.status(404).json({error: 'user not found'});
+        }else{
+            res.json({customer});
+        }
+    } catch (e){
+        res.status(500).json({error: 'something went wrong'});
+
+    }
+    
 });
 
 app.post('/api/customers', async (req, res) => {
