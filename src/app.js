@@ -72,6 +72,18 @@ app.get('/api/customers/:id',async(req, res) => {
     
 });
 
+app.put('/api/customers/:id', async(req,res)=>{
+    try{
+        const customerId = req.params.id;
+        const result = await Customer.replaceOne({_id: customerId}, req.body);
+        console.log(result);
+        res.json({updatedCount: result.modifiedCount});
+    } catch(e) {
+        res.status(500).json({error: 'something went wrong'});
+    }
+    
+});
+
 app.post('/api/customers', async (req, res) => {
     console.log(req.body);
     const customer = new Customer(req.body);
