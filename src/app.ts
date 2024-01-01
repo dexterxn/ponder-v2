@@ -1,9 +1,8 @@
-//@ts-nocheck
-
 const express = require('express');
 const mongoose = require('mongoose');
-const Customer = require('./models/customer');
+import {Customer} from './models/customer';
 const cors = require('cors');
+import { Request, Response } from 'express';
 
 const app = express();
 mongoose.set('strictQuery', false);
@@ -19,12 +18,11 @@ if(process.env.NODE_ENV !== 'production'){
 const PORT = process.env.PORT || 3005;
 const CONNECTION = process.env.CONNECTION;
 
-
-app.get('/', (req, res) => {
+app.get('/', (req:Request, res:Response) => {
     res.send("Welcome!!");
 });
 
-app.get('/api/customers', async (req, res) => {
+app.get('/api/customers', async (req:Request, res:Response) => {
     try{
         const result = await Customer.find();
         res.send({"customers": result});
@@ -34,7 +32,7 @@ app.get('/api/customers', async (req, res) => {
     
 });
 
-app.get('/api/customers/:id',async(req, res) => {
+app.get('/api/customers/:id',async(req:Request, res:Response) => {
     console.log({
         requestParams: req.params,
         requestQuery: req.query
@@ -56,7 +54,7 @@ app.get('/api/customers/:id',async(req, res) => {
     
 });
 
-app.put('/api/customers/:id', async(req,res)=>{
+app.put('/api/customers/:id', async(req:Request, res:Response)=>{
     try{
         const customerId = req.params.id;
         const customer = await Customer.findOneAndReplace({_id: customerId}, req.body, {new: true});
@@ -68,7 +66,7 @@ app.put('/api/customers/:id', async(req,res)=>{
     
 });
 
-app.patch('/api/customers/:id', async(req,res)=>{
+app.patch('/api/customers/:id', async(req:Request, res:Response)=>{
     try{
         const customerId = req.params.id;
         const customer = await Customer.findOneAndUpdate({_id: customerId}, req.body, {new: true});
@@ -80,7 +78,7 @@ app.patch('/api/customers/:id', async(req,res)=>{
     
 });
 
-app.patch('/api/orders/:id', async(req,res)=>{
+app.patch('/api/orders/:id', async(req:Request, res:Response)=>{
     console.log(req.params);
     const orderId = req.params.id;
     req.body._id = orderId;
@@ -104,7 +102,7 @@ app.patch('/api/orders/:id', async(req,res)=>{
     
 });
 
-app.get('/api/orders/:id', async(req,res)=>{
+app.get('/api/orders/:id', async(req:Request, res:Response)=>{
     try{
         const result = await Customer.findOne({'orders._id': req.params.id});
         if(result){
@@ -120,7 +118,7 @@ app.get('/api/orders/:id', async(req,res)=>{
 });
 
 
-app.delete('/api/customers/:id', async(req,res)=>{
+app.delete('/api/customers/:id', async(req:Request, res:Response)=>{
     try{
         const customerId = req.params.id;
         const result = await Customer.deleteOne({_id: customerId});
@@ -130,7 +128,7 @@ app.delete('/api/customers/:id', async(req,res)=>{
     }   
 });
 
-app.post('/api/customers', async (req, res) => {
+app.post('/api/customers', async (req:Request, res:Response) => {
     console.log(req.body);
     const customer = new Customer(req.body);
     try{
@@ -142,7 +140,7 @@ app.post('/api/customers', async (req, res) => {
     
 });
 
-app.post('/', (req, res) =>{
+app.post('/', (req:Request, res:Response) =>{
     res.send('This is a post request!');
 });
 
